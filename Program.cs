@@ -2,7 +2,7 @@
 {
     private static VendingMachine VendingMachine {get; set;} = new VendingMachine();
     private static bool ProgramModeIsWorkingFlag = true;
-    private static bool DepositModeIsWorkingFlag = true;
+    private static bool DepositModeIsWorkingFlag = false;
 
     //Reads users prompt and return command from it 
     private static string Prompt() {
@@ -106,7 +106,7 @@
         --Program mode help--
         help - Prints list of commands.
         list - Lists all available products and their price and count.
-        deposit - Insert coins in vending machine.
+        deposit - Enter deposit mode.
         select - Select product and get it if there is enough coins on deposit. Decrease deposit by price of product.
         change - Get left deposit.
         admin - Enter admin mode.
