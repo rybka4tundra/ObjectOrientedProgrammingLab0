@@ -21,5 +21,9 @@ class VendingMachine
             Deposit.Find(CoinStack => CoinStack.Nominal.Value == CoinValue).Count += 1;
             return true;
         }
-    } 
+    }
+
+    public override string ToString() {
+        return $"Deposit {Deposit.Sum(CoinStack => CoinStack.Value)}, Products: {Products}";
+    }
 }
