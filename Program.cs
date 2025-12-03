@@ -7,7 +7,7 @@
     //Reads users prompt and return command from it 
     private static string Prompt() {
         var line = Console.ReadLine();
-        if (line == null) {
+        if (String.IsNullOrWhiteSpace(line)) {
             return "";
         } else {
             return line.Split(" ", StringSplitOptions.RemoveEmptyEntries)[0];
@@ -16,11 +16,12 @@
 
     //Prints rules for command entering
     private static void CommandRules() {
-        Console.WriteLine(@"
+        Console.WriteLine("""
         --Command Rules--
         Command is a first word in the line.
         If there is a few words in line other words will be ignored.
-        ");
+
+        """);
     }
     
     //Lists all available products and their price and count
@@ -31,11 +32,13 @@
     //Prints list of commands for deposit mode
     private static void DepositModeHelp() {
         CommandRules();
-        Console.WriteLine(@"
+        Console.WriteLine("""
         --Deposit mode help--
         help - Prints list of commands for deposit mode.
         <int> - Insert coin with nominal <int>.
-        quit - Quit putting a deposit.");
+        quit - Quit putting a deposit.
+
+        """);
     }
 
     //Quits deposit mode
@@ -74,7 +77,7 @@
     //Prints list of commands for program mode
     private static void ProgramModeHelp() {
         CommandRules();
-        Console.WriteLine(@"
+        Console.WriteLine("""
         --Program mode help--
         help - Prints list of commands.
         list - Lists all available products and their price and count.
@@ -82,7 +85,9 @@
         select - Select product and get it if there is enough coins on deposit. Decrease deposit by price of product.
         change - Get left deposit.
         admin - Enter admin mode.
-        quit - Quits program.");
+        quit - Quits program.
+
+        """);
     }
 
     //Quits program mode
@@ -117,7 +122,7 @@
 
     static void Main(string[] args)
     {    
-        Console.WriteLine("--Vending Machine by Rybkin Andrey--");
+        Console.WriteLine("--Vending Machine by Rybkin Andrey--\n");
         ProgramMode();
     }
 }
