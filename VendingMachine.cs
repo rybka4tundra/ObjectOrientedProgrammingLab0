@@ -14,6 +14,7 @@ class VendingMachine
         get => Deposit.Sum(CoinStack => CoinStack.Value);
     }
 
+    //TODO Make in CoinStack Coin a private value and Count also
     public bool InsertCoin(int CoinValue){
         if (!AcceptableNominalsValues.Contains(CoinValue)){
             return false;
@@ -23,7 +24,18 @@ class VendingMachine
         }
     }
 
+    public void AddProductStack(string productName, int productPrice, int productCount) {
+        Products.Add(new ProductStack(productName, productPrice, productCount));
+
+    }
+
+    public int Collect(){
+        int income = this.DepositValue;
+        Deposit.Clear();
+        return income;
+    }
+
     public override string ToString() {
-        return $"Deposit {Deposit.Sum(CoinStack => CoinStack.Value)}, Products: {Products}";
+        return $"Deposit {Deposit.Sum(CoinStack => CoinStack.Value)},\nProducts:\n\t{string.Join("\n\t", Products)}";
     }
 }
