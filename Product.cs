@@ -1,5 +1,13 @@
 class Product
 {
-    private string Name {get; set;} = "";
-    private int Price {get; set;} = 0;
+    private string _name;
+    private int _price;
+    public Product(string ProductName, int ProductPrice){
+        _name = ProductName;
+        _price = ProductPrice;
+    }
+
+    public override string ToString() {
+        return $"Name: {_name}, Price: {_price}";
+    }
 }
