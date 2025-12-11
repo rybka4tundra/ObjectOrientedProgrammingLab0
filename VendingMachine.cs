@@ -1,17 +1,10 @@
-class VendingMachine
+class VendingMachine(HashSet<uint> AcceptableCoinValues)
 {
-    public HashSet<uint> AcceptableCoinValues { get; init; }
-    public Dictionary<uint, CoinStack> Coins { get; private set; }
-    public List<ProductStack> Products { get; private set; }
+    public HashSet<uint> AcceptableCoinValues { get; init; } = AcceptableCoinValues;
+    public Dictionary<uint, CoinStack> Coins { get; private set; } = [];
+    public List<ProductStack> Products { get; private set; } = [];
 
     public uint Deposit => checked((uint)Coins.Sum(x => x.Value.TotalValue));
-
-    public VendingMachine(HashSet<uint> AcceptableCoinValues)
-    {
-        this.AcceptableCoinValues = AcceptableCoinValues;
-        Coins = new Dictionary<uint, CoinStack>();
-        Products = new List<ProductStack>();
-    }
 
     public void AddCoinStack(Coin Coin, uint Count)
     {
@@ -25,7 +18,7 @@ class VendingMachine
     public void AddCoins(uint Value, uint Count)
     {
         if (!AcceptableCoinValues.Contains(Value))
-            throw new ArgumentException(nameof(Value), "Value should be present in AcceptableCoinValues");
+            throw new ArgumentException("Value should be present in AcceptableCoinValues", nameof(Value));
         if (!Coins.TryGetValue(Value, out CoinStack coinStack))
             throw new ArgumentOutOfRangeException(nameof(Value), "Value should be present in Coins keys");
         coinStack.AddCoins(Count);

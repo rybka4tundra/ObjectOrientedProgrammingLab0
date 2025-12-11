@@ -11,7 +11,7 @@
 
     static Program()
     {
-        AcceptableCoinValues = new HashSet<uint>() { 1, 2, 5, 10 };
+        AcceptableCoinValues = [1, 2, 5, 10];
         VendingMachine = new VendingMachine(AcceptableCoinValues);
         ProgramModeIsWorkingFlag = true;
         DepositModeIsWorkingFlag = false;
@@ -119,9 +119,11 @@
     {
         DepositModeIsWorkingFlag = true;
         DepositModeHelp();
-        Dictionary<string, Action> commandMap = new Dictionary<string, Action>();
-        commandMap.Add("help", DepositModeHelp);
-        commandMap.Add("quit", QuitDepositMode);
+        Dictionary<string, Action> commandMap = new()
+        {
+            { "help", DepositModeHelp },
+            { "quit", QuitDepositMode }
+        };
         while (DepositModeIsWorkingFlag)
         {
             PromptExecutor(commandMap, TryExecuteDeposit);
@@ -171,9 +173,11 @@
     {
         AddModeIsWorkingFlag = true;
         AddModeHelp();
-        Dictionary<string, Action> commandMap = new Dictionary<string, Action>();
-        commandMap.Add("help", AddModeHelp);
-        commandMap.Add("quit", QuitAddMode);
+        Dictionary<string, Action> commandMap = new()
+        {
+            { "help", AddModeHelp },
+            { "quit", QuitAddMode }
+        };
         while (AddModeIsWorkingFlag)
         {
             PromptExecutor(commandMap, TryExecuteAdd);
@@ -228,9 +232,11 @@
     {
         DeleteModeIsWorkingFlag = true;
         DeleteModeHelp();
-        Dictionary<string, Action> commandMap = new Dictionary<string, Action>();
-        commandMap.Add("help", DeleteModeHelp);
-        commandMap.Add("quit", QuitDeleteMode);
+        Dictionary<string, Action> commandMap = new()
+        {
+            { "help", DeleteModeHelp },
+            { "quit", QuitDeleteMode }
+        };
         while (DeleteModeIsWorkingFlag)
         {
             PromptExecutor(commandMap, TryExecuteDelete);
@@ -270,12 +276,14 @@
     {
         AdminModeIsWorkingFlag = true;
         AdminModeHelp();
-        Dictionary<string, Action> commandMap = new Dictionary<string, Action>();
-        commandMap.Add("help", AdminModeHelp);
-        commandMap.Add("list", List);
-        commandMap.Add("collect", Collect);
-        commandMap.Add("add", AddMode);
-        commandMap.Add("quit", QuitAdminMode);
+        Dictionary<string, Action> commandMap = new()
+        {
+            { "help", AdminModeHelp },
+            { "list", List },
+            { "collect", Collect },
+            { "add", AddMode },
+            { "quit", QuitAdminMode }
+        };
         while (AdminModeIsWorkingFlag)
         {
             PromptExecutor(commandMap);
@@ -309,12 +317,14 @@
     private static void ProgramMode()
     {
         ProgramModeHelp();
-        Dictionary<string, Action> commandMap = new Dictionary<string, Action>();
-        commandMap.Add("help", ProgramModeHelp);
-        commandMap.Add("list", List);
-        commandMap.Add("deposit", DepositMode);
-        commandMap.Add("admin", AdminMode);
-        commandMap.Add("quit", QuitProgramMode);
+        Dictionary<string, Action> commandMap = new()
+        {
+            { "help", ProgramModeHelp },
+            { "list", List },
+            { "deposit", DepositMode },
+            { "admin", AdminMode },
+            { "quit", QuitProgramMode }
+        };
         while (ProgramModeIsWorkingFlag)
         {
             PromptExecutor(commandMap);
