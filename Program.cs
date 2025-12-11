@@ -1,17 +1,35 @@
 ﻿class Program
 {
-    private static VendingMachine VendingMachine {get; set;} = new VendingMachine();
-    private static bool ProgramModeIsWorkingFlag = true;
-    private static bool DepositModeIsWorkingFlag = false;
-    private static bool AdminModeIsWorkingFlag = false;
-    private static bool AddModeIsWorkingFlag = false;
+    private static HashSet<uint> AcceptableCoinValues;
+
+    private static VendingMachine VendingMachine;
+    private static bool ProgramModeIsWorkingFlag;
+    private static bool DepositModeIsWorkingFlag;
+    private static bool AdminModeIsWorkingFlag;
+    private static bool AddModeIsWorkingFlag;
+    private static bool DeleteModeIsWorkingFlag;
+
+    static Program()
+    {
+        AcceptableCoinValues = new HashSet<uint>() { 1, 2, 5, 10 };
+        VendingMachine = new VendingMachine(AcceptableCoinValues);
+        ProgramModeIsWorkingFlag = true;
+        DepositModeIsWorkingFlag = false;
+        AdminModeIsWorkingFlag = false;
+        AddModeIsWorkingFlag = false;
+        DeleteModeIsWorkingFlag = false;
+    }
+
 
     //Reads users prompt and return a command from it 
-    private static string Prompt() {
+    private static string Prompt()
+    {
         string? line;
-        while(true){
+        while (true)
+        {
             line = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(line)) {
+            if (!string.IsNullOrWhiteSpace(line))
+            {
                 break;
             }
         }
@@ -19,20 +37,27 @@
     }
 
     //Executes single prompt
-    private static bool PromptExecutor(Dictionary<string, Action> commandMap, Func<string, bool>? tryExecuteMainCommand = null) {
+    private static bool PromptExecutor(Dictionary<string, Action> commandMap, Func<string, bool>? tryExecuteMainCommand = null)
+    {
         string prompt = Prompt();
-        if (commandMap.TryGetValue(prompt, out Action action)) {
+        if (commandMap.TryGetValue(prompt, out Action action))
+        {
             action();
             return true;
-        } else if (tryExecuteMainCommand != null && tryExecuteMainCommand(prompt)) {
+        }
+        else if (tryExecuteMainCommand != null && tryExecuteMainCommand(prompt))
+        {
             return true;
-        } else {
+        }
+        else
+        {
             return false;
         }
     }
 
     //Prints rules for command entering
-    private static void CommandRules() {
+    private static void CommandRules()
+    {
         Console.WriteLine("""
         --Command Rules--
         Command is a first word in the line.
@@ -40,14 +65,16 @@
 
         """);
     }
-    
+
     //Lists all available products and their price and count
-    private static void List() {
-        Console.WriteLine(VendingMachine); 
+    private static void List()
+    {
+        Console.WriteLine(VendingMachine);
     }
 
     //Prints list of commands for deposit mode
-    private static void DepositModeHelp() {
+    private static void DepositModeHelp()
+    {
         CommandRules();
         Console.WriteLine("""
         --Deposit mode help--
@@ -59,31 +86,37 @@
     }
 
     //Quits deposit mode
-    private static void QuitDepositMode() {
+    private static void QuitDepositMode()
+    {
         DepositModeIsWorkingFlag = false;
     }
 
     //Inserts coin into vending machine
-    private static void InsertCoin(int coinValue) {
-        if (VendingMachine.InsertCoin(coinValue)) {
-            Console.WriteLine("SUCCESS: Coin was put in deposit");
-        } else {
-            Console.WriteLine("FAIL: Coins with this nominal is unacaptable");
-        }
+    private static void InsertCoin(uint coinValue)
+    {
+        if (VendingMachine.Coins.ContainsKey(coinValue))
+            VendingMachine.AddCoins(coinValue, 1);
+        else
+            VendingMachine.AddCoinStack(new Coin(coinValue), 1);
     }
 
     //Check if prompt can be parsed and if yes than executes main command 
-    private static bool TryExecuteDeposit(string prompt){
-        if (int.TryParse(prompt, out int parsedPrompt)) {
-            InsertCoin(parsedPrompt);
-            return true;
-        } else {
-            return false;
+    private static bool TryExecuteDeposit(string prompt)
+    {
+        if (uint.TryParse(prompt, out uint parsedPrompt))
+        {
+            if (AcceptableCoinValues.Contains(parsedPrompt))
+            {
+                InsertCoin(parsedPrompt);
+                return true;
+            }
         }
+        return false;
     }
 
     //Enter deposit mode
-    private static void DepositMode() {
+    private static void DepositMode()
+    {
         DepositModeIsWorkingFlag = true;
         DepositModeHelp();
         Dictionary<string, Action> commandMap = new Dictionary<string, Action>();
@@ -91,42 +124,51 @@
         commandMap.Add("quit", QuitDepositMode);
         while (DepositModeIsWorkingFlag)
         {
-            PromptExecutor(commandMap, TryExecuteDeposit); 
+            PromptExecutor(commandMap, TryExecuteDeposit);
         }
     }
 
     //Prints list of commands for add mode
-    private static void AddModeHelp() {
+    private static void AddModeHelp()
+    {
         CommandRules();
         Console.WriteLine("""
         --Add mode help--
         help - Prints list of commands for add mode.
         <string ProductName>:<int ProductPrice>:<int ProductCount> - adds a stack of product with name, price and count.
-        quit - Quit putting a deposit.
+        quit - Quit add mode.
 
         """);
     }
 
     //Check if prompt can be parsed and if yes than executes main command 
-    private static bool TryExecuteAdd(string prompt){
+    private static bool TryExecuteAdd(string prompt)
+    {
         string[] tokens = prompt.Split(':');
-        if (tokens.Length != 3){
+        if (tokens.Length != 3)
+        {
             return false;
-        }else if (int.TryParse(tokens[1], out int parsedPrice) && int.TryParse(tokens[2], out int parsedCount)) {
-            VendingMachine.AddProductStack(tokens[0], parsedPrice, parsedCount);
+        }
+        else if (uint.TryParse(tokens[1], out uint parsedPrice) && uint.TryParse(tokens[2], out uint parsedCount))
+        {
+            VendingMachine.AddProductStack(new Product(tokens[0], parsedPrice), parsedCount);
             return true;
-        } else {
+        }
+        else
+        {
             return false;
         }
     }
 
     //Quits add mode
-    private static void QuitAddMode() {
+    private static void QuitAddMode()
+    {
         AddModeIsWorkingFlag = false;
     }
 
     //Enter add mode
-    private static void AddMode() {
+    private static void AddMode()
+    {
         AddModeIsWorkingFlag = true;
         AddModeHelp();
         Dictionary<string, Action> commandMap = new Dictionary<string, Action>();
@@ -134,12 +176,70 @@
         commandMap.Add("quit", QuitAddMode);
         while (AddModeIsWorkingFlag)
         {
-            PromptExecutor(commandMap,TryExecuteAdd); 
+            PromptExecutor(commandMap, TryExecuteAdd);
+        }
+    }
+
+    //Prints list of commands for delete mode
+    private static void DeleteModeHelp()
+    {
+        CommandRules();
+        Console.WriteLine("""
+        --Delete mode help--
+        help - Prints list of commands for delete mode.
+        <int ProductStackID>:<int ProductCount> - removes ProductCount products from product stack with id ProductStackID.
+        quit - Quit delete mode.
+
+        """);
+    }
+
+    private static void RemoveFromProductStack(int parsedProductStackId, uint parsedProductCount)
+    {
+        VendingMachine.RemoveProducts(parsedProductStackId, parsedProductCount);
+    }
+
+    //Check if prompt can be parsed and if yes than executes main command 
+    private static bool TryExecuteDelete(string prompt)
+    {
+        string[] tokens = prompt.Split(':');
+        if (tokens.Length != 2)
+        {
+            return false;
+        }
+        else if (int.TryParse(tokens[0], out int parsedProductStackId) && uint.TryParse(tokens[1], out uint parsedProductCount))
+        {
+            RemoveFromProductStack(parsedProductStackId, parsedProductCount);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    //Quits delete mode
+    private static void QuitDeleteMode()
+    {
+        DeleteModeIsWorkingFlag = false;
+    }
+
+    //Enter Delete mode
+    private static void DeleteMode()
+    {
+        DeleteModeIsWorkingFlag = true;
+        DeleteModeHelp();
+        Dictionary<string, Action> commandMap = new Dictionary<string, Action>();
+        commandMap.Add("help", DeleteModeHelp);
+        commandMap.Add("quit", QuitDeleteMode);
+        while (DeleteModeIsWorkingFlag)
+        {
+            PromptExecutor(commandMap, TryExecuteDelete);
         }
     }
 
     //Prints list of commands for admin mode
-    private static void AdminModeHelp() {
+    private static void AdminModeHelp()
+    {
         CommandRules();
         Console.WriteLine("""
         --Admin mode help--
@@ -154,17 +254,20 @@
     }
 
     //Collects money from vending machine
-    private static void Collect() {
-        Console.WriteLine($"From vending machine were collected: {VendingMachine.Collect()}");
+    private static void Collect()
+    {
+        Console.WriteLine($"From vending machine were collected: DEPRECATED");
     }
 
     //Quits admin mode
-    private static void QuitAdminMode() {
+    private static void QuitAdminMode()
+    {
         AdminModeIsWorkingFlag = false;
     }
 
     //Enter admin mode
-    private static void AdminMode() {
+    private static void AdminMode()
+    {
         AdminModeIsWorkingFlag = true;
         AdminModeHelp();
         Dictionary<string, Action> commandMap = new Dictionary<string, Action>();
@@ -175,12 +278,13 @@
         commandMap.Add("quit", QuitAdminMode);
         while (AdminModeIsWorkingFlag)
         {
-            PromptExecutor(commandMap); 
+            PromptExecutor(commandMap);
         }
     }
 
     //Prints list of commands for program mode
-    private static void ProgramModeHelp() {
+    private static void ProgramModeHelp()
+    {
         CommandRules();
         Console.WriteLine("""
         --Program mode help--
@@ -196,12 +300,14 @@
     }
 
     //Quits program mode
-    private static void QuitProgramMode() {
+    private static void QuitProgramMode()
+    {
         ProgramModeIsWorkingFlag = false;
     }
 
     //Enter program mode
-    private static void ProgramMode() {
+    private static void ProgramMode()
+    {
         ProgramModeHelp();
         Dictionary<string, Action> commandMap = new Dictionary<string, Action>();
         commandMap.Add("help", ProgramModeHelp);
@@ -211,12 +317,12 @@
         commandMap.Add("quit", QuitProgramMode);
         while (ProgramModeIsWorkingFlag)
         {
-            PromptExecutor(commandMap); 
+            PromptExecutor(commandMap);
         }
     }
 
     static void Main(string[] args)
-    {    
+    {
         Console.WriteLine("--Vending Machine by Rybkin Andrey--\n");
         ProgramMode();
     }

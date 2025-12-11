@@ -1,13 +1,20 @@
 class Product
 {
-    private string _name;
-    private int _price;
-    public Product(string ProductName, int ProductPrice){
-        _name = ProductName;
-        _price = ProductPrice;
+    public string Name { get; private set; }
+    public uint Price { get; private set; }
+
+    public Product(string Name, uint Price)
+    {
+        if (Name == "")
+            throw new ArgumentOutOfRangeException(nameof(Name), "Name cannot be empty.");
+        if (Price == 0)
+            throw new ArgumentOutOfRangeException(nameof(Price), "Price cannot be zero.");
+        this.Name = Name;
+        this.Price = Price;
     }
 
-    public override string ToString() {
-        return $"Name: {_name}, Price: {_price}";
+    public override string ToString()
+    {
+        return $"Name: {Name}, Price: {Price}";
     }
 }
