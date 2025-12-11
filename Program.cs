@@ -1,8 +1,8 @@
 ﻿class Program
 {
-    private static HashSet<uint> AcceptableCoinValues;
+    private static readonly HashSet<uint> AcceptableCoinValues;
 
-    private static VendingMachine VendingMachine;
+    private static readonly VendingMachine VendingMachine;
     private static bool ProgramModeIsWorkingFlag;
     private static bool DepositModeIsWorkingFlag;
     private static bool AdminModeIsWorkingFlag;
