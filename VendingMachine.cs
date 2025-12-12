@@ -19,7 +19,7 @@ class VendingMachine(HashSet<uint> AcceptableCoinValues)
     {
         if (!AcceptableCoinValues.Contains(Value))
             throw new ArgumentException("Value should be present in AcceptableCoinValues", nameof(Value));
-        if (!Coins.TryGetValue(Value, out CoinStack coinStack))
+        if (!Coins.TryGetValue(Value, out CoinStack? coinStack))
             throw new ArgumentOutOfRangeException(nameof(Value), "Value should be present in Coins keys");
         coinStack.AddCoins(Count);
     }
@@ -33,7 +33,7 @@ class VendingMachine(HashSet<uint> AcceptableCoinValues)
 
     public void RemoveCoins(uint Value, uint Count)
     {
-        if (!Coins.TryGetValue(Value, out CoinStack coinStack))
+        if (!Coins.TryGetValue(Value, out CoinStack? coinStack))
             throw new ArgumentOutOfRangeException(nameof(Value), "Value should be present in Coins keys");
         coinStack.RemoveCoins(Count);
     }

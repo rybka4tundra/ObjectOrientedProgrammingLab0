@@ -5,7 +5,7 @@
     private static readonly VendingMachine VendingMachine;
     private static bool ProgramModeIsWorkingFlag;
     private static bool DepositModeIsWorkingFlag;
-    private static bool AdminModeIsWorkingFlag;
+    //private static bool AdminModeIsWorkingFlag;
     private static bool AddModeIsWorkingFlag;
     private static bool DeleteModeIsWorkingFlag;
 
@@ -15,7 +15,7 @@
         VendingMachine = new VendingMachine(AcceptableCoinValues);
         ProgramModeIsWorkingFlag = true;
         DepositModeIsWorkingFlag = false;
-        AdminModeIsWorkingFlag = false;
+        // AdminModeIsWorkingFlag = false;
         AddModeIsWorkingFlag = false;
         DeleteModeIsWorkingFlag = false;
     }
@@ -40,7 +40,7 @@
     private static bool PromptExecutor(Dictionary<string, Action> commandMap, Func<string, bool>? tryExecuteMainCommand = null)
     {
         string prompt = Prompt();
-        if (commandMap.TryGetValue(prompt, out Action action))
+        if (commandMap.TryGetValue(prompt, out Action? action))
         {
             action();
             return true;
@@ -212,6 +212,8 @@
         }
         else if (int.TryParse(tokens[0], out int parsedProductStackId) && uint.TryParse(tokens[1], out uint parsedProductCount))
         {
+            if (parsedProductStackId < 0 || parsedProductStackId >= VendingMachine.Products.Count)
+                return false;
             RemoveFromProductStack(parsedProductStackId, parsedProductCount);
             return true;
         }
@@ -244,20 +246,20 @@
     }
 
     //Prints list of commands for admin mode
-    private static void AdminModeHelp()
-    {
-        CommandRules();
-        Console.WriteLine("""
-        --Admin mode help--
-        help - Prints list of commands for admin mode.
-        list - Lists all available products and their price and count.
-        collect - collects income.
-        add - Enter add mode.
-        delete - Enter delete mode.
-        quit - Quit admin mode.
+    // private static void AdminModeHelp()
+    // {
+    //     CommandRules();
+    //     Console.WriteLine("""
+    //     --Admin mode help--
+    //     help - Prints list of commands for admin mode.
+    //     list - Lists all available products and their price and count.
+    //     collect - collects income.
+    //     add - Enter add mode.
+    //     delete - Enter delete mode.
+    //     quit - Quit admin mode.
 
-        """);
-    }
+    //     """);
+    // }
 
     //Collects money from vending machine
     private static void Collect()
@@ -266,29 +268,30 @@
     }
 
     //Quits admin mode
-    private static void QuitAdminMode()
-    {
-        AdminModeIsWorkingFlag = false;
-    }
+    // private static void QuitAdminMode()
+    // {
+    //     AdminModeIsWorkingFlag = false;
+    // }
 
     //Enter admin mode
-    private static void AdminMode()
-    {
-        AdminModeIsWorkingFlag = true;
-        AdminModeHelp();
-        Dictionary<string, Action> commandMap = new()
-        {
-            { "help", AdminModeHelp },
-            { "list", List },
-            { "collect", Collect },
-            { "add", AddMode },
-            { "quit", QuitAdminMode }
-        };
-        while (AdminModeIsWorkingFlag)
-        {
-            PromptExecutor(commandMap);
-        }
-    }
+    // private static void AdminMode()
+    // {
+    //     AdminModeIsWorkingFlag = true;
+    //     AdminModeHelp();
+    //     Dictionary<string, Action> commandMap = new()
+    //     {
+    //         { "help", AdminModeHelp },
+    //         { "list", List },
+    //         { "collect", Collect },
+    //         { "add", AddMode },
+    //         { "delete", DeleteMode },
+    //         { "quit", QuitAdminMode }
+    //     };
+    //     while (AdminModeIsWorkingFlag)
+    //     {
+    //         PromptExecutor(commandMap);
+    //     }
+    // }
 
     //Prints list of commands for program mode
     private static void ProgramModeHelp()
@@ -301,7 +304,7 @@
         deposit - Enter deposit mode.
         select - Select product and get it if there is enough coins on deposit. Decrease deposit by price of product.
         change - Get left deposit.
-        admin - Enter admin mode.
+        // admin - Enter admin mode.
         quit - Quits program.
 
         """);
@@ -316,13 +319,14 @@
     //Enter program mode
     private static void ProgramMode()
     {
+        AdminMode adminMode = new();
         ProgramModeHelp();
         Dictionary<string, Action> commandMap = new()
         {
             { "help", ProgramModeHelp },
             { "list", List },
             { "deposit", DepositMode },
-            { "admin", AdminMode },
+            { "admin", adminMode.Run },
             { "quit", QuitProgramMode }
         };
         while (ProgramModeIsWorkingFlag)
