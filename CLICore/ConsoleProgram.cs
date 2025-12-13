@@ -1,6 +1,5 @@
 public abstract class ConsoleProgram {
-    protected abstract Mode _startMode {get; set;}
-    public void Run() {
-        _startMode.Run();
-    }
+    protected virtual Mode _startMode {get; set;}
+    public ConsoleProgram(Mode StartMode){_startMode = StartMode;}
+    public void Run() {_startMode.Run();}
 }
