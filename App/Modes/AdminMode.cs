@@ -4,7 +4,8 @@ public class AdminMode : Mode
         "admin",
         [
             new List(vendingMachine),
-            new AddMode(vendingMachine)
+            new AddMode(vendingMachine),
+            new DeleteMode(vendingMachine)
             ],
         null
         )
