@@ -3,7 +3,6 @@ public abstract class Mode : Command
 {
     //Make mode not editable after initialization
     //Add MainCommand to helptext
-    //Check if enteering other mode then tell that you entering fromMode -> toMode
     protected bool IsWorking { get; set; }
     protected List<Command> Commands { get; set; }
     protected Command? MainCommand { get; set; }
@@ -22,11 +21,9 @@ public abstract class Mode : Command
     }
     private void _start()
     {
-        _enter();
         IsWorking = true;
         while (IsWorking)
-            ExecutorSwitch.Run(Commands, MainCommand);
-        _leave();
+            ExecutorSwitch.Run(Name, Commands, MainCommand);
     }
     private void _baseCommands()
     {
