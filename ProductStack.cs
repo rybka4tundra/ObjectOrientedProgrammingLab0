@@ -1,4 +1,4 @@
-class ProductStack
+public class ProductStack
 {
     public Product Product { get; private set; }
     public uint Count { get; private set; }

@@ -1,4 +1,4 @@
-class VendingMachine(HashSet<uint> AcceptableCoinValues)
+public class VendingMachine(HashSet<uint> AcceptableCoinValues)
 {
     public HashSet<uint> AcceptableCoinValues { get; init; } = AcceptableCoinValues;
     public Dictionary<uint, CoinStack> Coins { get; private set; } = [];

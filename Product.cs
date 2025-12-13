@@ -1,4 +1,4 @@
-class Product
+public class Product
 {
     public string Name { get; private set; }
     public uint Price { get; private set; }

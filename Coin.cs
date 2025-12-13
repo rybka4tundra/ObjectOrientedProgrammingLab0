@@ -1,4 +1,4 @@
-class Coin
+public class Coin
 {
     public uint Value { get; private set; }
 

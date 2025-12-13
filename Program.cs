@@ -319,14 +319,14 @@
     //Enter program mode
     private static void ProgramMode()
     {
-        AdminMode adminMode = new();
+        VendingMachineMode vendingMachineMode = new();
         ProgramModeHelp();
         Dictionary<string, Action> commandMap = new()
         {
             { "help", ProgramModeHelp },
             { "list", List },
             { "deposit", DepositMode },
-            { "admin", adminMode.Run },
+            { "admin", vendingMachineMode.Run },
             { "quit", QuitProgramMode }
         };
         while (ProgramModeIsWorkingFlag)
@@ -337,7 +337,10 @@
 
     static void Main(string[] args)
     {
-        Console.WriteLine("--Vending Machine by Rybkin Andrey--\n");
-        ProgramMode();
+        // Console.WriteLine("--Vending Machine by Rybkin Andrey--\n");
+        // ProgramMode();
+        VendingMachineMode vendingMachineMode = new();
+        vendingMachineMode.Run();
+
     }
 }
