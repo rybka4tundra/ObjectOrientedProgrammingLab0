@@ -2,6 +2,8 @@ using System.Text;
 public abstract class Mode : Command
 {
     //Make mode not editable after initialization
+    //Add MainCommand to helptext
+    //Check if enteering other mode then tell that you entering fromMode -> toMode
     protected bool IsWorking { get; set; }
     protected List<Command> Commands { get; set; }
     protected Command? MainCommand { get; set; }
@@ -29,8 +31,8 @@ public abstract class Mode : Command
     private void _baseCommands()
     {
         //check if commands exists
-        Commands.Add(new BaseCommand("quit", $"quits {Name} mode", _quit, null));
-        Commands.Add(new BaseCommand("help", $"prints help text for {Name} mode", _help, null));
+        Commands.Add(new BaseCommand("quit", $"Quits {Name} mode.", _quit, null));
+        Commands.Add(new BaseCommand("help", $"Prints help text for {Name} mode.", _help, null));
     }
     private string _description()
     {

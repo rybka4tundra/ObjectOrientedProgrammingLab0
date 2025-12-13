@@ -1,1 +1,1 @@
-public class VendingMachineProgram : ConsoleProgram {public VendingMachineProgram() : base(new VendingMachineMode()){}}
+public class VendingMachineProgram : ConsoleProgram {public VendingMachineProgram(VendingMachine vendingMachine) : base(new VendingMachineMode(vendingMachine)){}}

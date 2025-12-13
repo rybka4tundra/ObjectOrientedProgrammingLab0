@@ -4,6 +4,11 @@ public abstract class Command
     public virtual string Description { get; set; }
     public virtual Action? Function { get; set; }
     public virtual Action<string>? FunctionArgs { get; set; }
+    public Command()
+    {
+        this.Name = "";
+        this.Description = "";
+    }
     public Command(string Name, string Description, Action? Function, Action<string>? FunctionArgs)
     {
         this.Name = Name;

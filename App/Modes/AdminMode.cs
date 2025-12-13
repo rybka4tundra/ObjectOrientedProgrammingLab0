@@ -1,8 +1,11 @@
 public class AdminMode : Mode
 {
-    public AdminMode() : base(
+    public AdminMode(VendingMachine vendingMachine) : base(
         "admin",
-        new List<Command> { new List() },
+        [
+            new List(vendingMachine),
+            new AddMode(vendingMachine)
+            ],
         null
         )
     { }

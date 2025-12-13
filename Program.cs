@@ -317,29 +317,29 @@
     }
 
     //Enter program mode
-    private static void ProgramMode()
-    {
-        VendingMachineMode vendingMachineMode = new();
-        ProgramModeHelp();
-        Dictionary<string, Action> commandMap = new()
-        {
-            { "help", ProgramModeHelp },
-            { "list", List },
-            { "deposit", DepositMode },
-            { "admin", vendingMachineMode.Run },
-            { "quit", QuitProgramMode }
-        };
-        while (ProgramModeIsWorkingFlag)
-        {
-            PromptExecutor(commandMap);
-        }
-    }
+    // private static void ProgramMode()
+    // {
+    //     VendingMachineMode vendingMachineMode = new();
+    //     ProgramModeHelp();
+    //     Dictionary<string, Action> commandMap = new()
+    //     {
+    //         { "help", ProgramModeHelp },
+    //         { "list", List },
+    //         { "deposit", DepositMode },
+    //         { "admin", vendingMachineMode.Run },
+    //         { "quit", QuitProgramMode }
+    //     };
+    //     while (ProgramModeIsWorkingFlag)
+    //     {
+    //         PromptExecutor(commandMap);
+    //     }
+    // }
 
     static void Main(string[] args)
     {
         // Console.WriteLine("--Vending Machine by Rybkin Andrey--\n");
         // ProgramMode();
-        VendingMachineMode vendingMachineMode = new();
+        VendingMachineMode vendingMachineMode = new(VendingMachine);
         vendingMachineMode.Run();
 
     }
