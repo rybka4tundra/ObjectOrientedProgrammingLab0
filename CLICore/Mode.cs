@@ -39,6 +39,8 @@ public abstract class Mode : Command
     {
         StringBuilder sb = new StringBuilder();
         sb.AppendLine($"--{Name} mode help--");
+        if (MainCommand != null)
+            sb.AppendLine(MainCommand.ToString());
         foreach (var command in Commands)
             sb.AppendLine(command.ToString());
         return sb.ToString();
